@@ -4,12 +4,6 @@ server:
 spring:
   application:
     name: PODBooking
-  datasource:
-    url: jdbc:mysql://${MYSQL_URL:localhost}:${MYSQL_PORT:3308}/pod
-    #    url: ${MYSQL_URL:jdbc:mysql://localhost:3307/uniclub}
-    username: ${MYSQL_ADMIN_USER:root}
-    password: ${MYSQL_ADMIN_PASS:sa123}
-    driver-class-name: com.mysql.cj.jdbc.Driver
 
   data:
     mongodb:

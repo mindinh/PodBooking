@@ -1,14 +1,13 @@
 package com.md.PODBooking.repository;
 
-import com.md.PODBooking.entity.User;
+
+import com.md.PODBooking.entity.Space;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UsersRepository extends MongoRepository<User, String> {
-
-    Optional<User> findByUserEmail(String email);
-
+public interface SpacesRepository extends MongoRepository<Space, String> {
+    Optional<Space> findBySpaceName(String name);
 }

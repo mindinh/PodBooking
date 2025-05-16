@@ -15,6 +15,7 @@ import java.util.Map;
 public class Location {
     @Id
     private String id;
+    private String locationId;
     private String locationName;
     private String locationIntroduction;
     private String address;

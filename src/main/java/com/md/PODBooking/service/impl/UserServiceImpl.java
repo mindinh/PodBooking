@@ -2,7 +2,7 @@ package com.md.PODBooking.service.impl;
 
 import com.md.PODBooking.entity.Role;
 import com.md.PODBooking.entity.Status;
-import com.md.PODBooking.entity.UserEntity;
+import com.md.PODBooking.entity.User;
 import com.md.PODBooking.exception.ResourceNotFoundException;
 import com.md.PODBooking.repository.UsersRepository;
 import com.md.PODBooking.request.UserCreateRequest;
@@ -27,20 +27,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> findAllUsers() {
+    public List<User> findAllUsers() {
 
         return usersRepository.findAll();
     }
 
     @Override
-    public UserEntity createUser(UserCreateRequest userCreateRequest) {
-        Optional<UserEntity> userEntity = usersRepository.findByUserEmail(userCreateRequest.email());
+    public User createUser(UserCreateRequest userCreateRequest) {
+        Optional<User> userEntity = usersRepository.findByUserEmail(userCreateRequest.email());
 
         if (userEntity.isPresent()) {
             throw new RuntimeException("User already exists");
         }
 
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setUserEmail(userCreateRequest.email());
         user.setUserPhone(userCreateRequest.phoneNumber());
         user.setFullName(userCreateRequest.fullName());
@@ -56,12 +56,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserRole(String id, String role) {
-        Optional<UserEntity> userEntity = usersRepository.findById(id);
+        Optional<User> userEntity = usersRepository.findById(id);
 
         if (userEntity.isEmpty()) {
             throw new RuntimeException("User not found");
         }
-        UserEntity user = userEntity.get();
+        User user = userEntity.get();
         try {
             user.setRole(Role.valueOf(role));
 
@@ -76,12 +76,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String id) {
-        Optional<UserEntity> userEntity = usersRepository.findById(id);
+        Optional<User> userEntity = usersRepository.findById(id);
 
         if (userEntity.isEmpty()) {
             throw new RuntimeException("User not found");
         }
-        UserEntity user = userEntity.get();
+        User user = userEntity.get();
         user.setStatus(Status.INACTIVE);
         user.setUpdatedAt(LocalDateTime.now());
         usersRepository.save(user);

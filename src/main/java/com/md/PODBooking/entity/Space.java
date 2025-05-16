@@ -9,16 +9,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document(collection = "pods")
+@Document(collection = "spaces")
 @Data
 @AllArgsConstructor @NoArgsConstructor
-public class PodEntity {
+public class Space {
     @Id
     private String id;
-    private String podName;
-    private List<String> podImages;
-    private String podDescription;
-    private int podCapacity;
-    private String locationId;
+    private String spaceName;
+    private List<String> amenities;
+    private List<String> spaceImages;
+    private String spaceDescription;
+    private List<String> suitableFor;
+    private int spaceCapacity;
+    private List<Integer> locationId;
+    private List<Combo> spaceCombos;
     private Status status;
 }

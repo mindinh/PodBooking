@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Document(collection = "users")
 @Data
 @AllArgsConstructor @NoArgsConstructor
-public class UserEntity {
+public class User {
     @Id
     private String id;
 

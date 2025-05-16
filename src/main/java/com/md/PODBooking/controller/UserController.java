@@ -1,7 +1,7 @@
 package com.md.PODBooking.controller;
 
 
-import com.md.PODBooking.entity.UserEntity;
+import com.md.PODBooking.entity.User;
 import com.md.PODBooking.request.UserCreateRequest;
 import com.md.PODBooking.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<?> getAllUsers() {
-        List<UserEntity> userEntityList = userService.findAllUsers();
+        List<User> userList = userService.findAllUsers();
 
-        return ResponseEntity.ok().body(userEntityList);
+        return ResponseEntity.ok().body(userList);
     }
 
     @PostMapping("/add")
