@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface SpaceService {
     List<Space> findAllSpaces();
+    Space findSpaceByName(String name);
     void insertSpace(SpaceInsertRequest insertRequest);
     boolean updateSpace(SpaceUpdateRequest updateRequest);
     boolean addCombo(String spaceName, ComboDto comboDto);

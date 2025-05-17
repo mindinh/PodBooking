@@ -35,6 +35,14 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
+    public Space findSpaceByName(String name) {
+        Space space = spacesRepository.findBySpaceName(name).orElseThrow(
+                () -> new ResourceNotFoundException("Space", "name", name)
+        );
+        return space;
+    }
+
+    @Override
     public void insertSpace(SpaceInsertRequest request) {
         Space space = new Space();
         try {
