@@ -3,12 +3,15 @@ package com.md.PODBooking.service.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.md.PODBooking.dto.ComboDto;
+import com.md.PODBooking.dto.LocationDto;
 import com.md.PODBooking.entity.Combo;
+import com.md.PODBooking.entity.Location;
 import com.md.PODBooking.entity.Space;
 import com.md.PODBooking.entity.Status;
 import com.md.PODBooking.exception.InsertException;
 import com.md.PODBooking.exception.ResourceNotFoundException;
 import com.md.PODBooking.mapper.ComboMapper;
+import com.md.PODBooking.repository.LocationsRepository;
 import com.md.PODBooking.repository.SpacesRepository;
 import com.md.PODBooking.request.SpaceInsertRequest;
 import com.md.PODBooking.request.SpaceUpdateRequest;
@@ -17,14 +20,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
 public class SpaceServiceImpl implements SpaceService {
-    private SpacesRepository spacesRepository;
-    private ObjectMapper objectMapper;
-    public SpaceServiceImpl(SpacesRepository spacesRepository, ObjectMapper objectMapper) {
+    private final SpacesRepository spacesRepository;
+    private final LocationsRepository locationsRepository;
+    private final ObjectMapper objectMapper;
+
+    public SpaceServiceImpl(SpacesRepository spacesRepository, ObjectMapper objectMapper, LocationsRepository locationsRepository) {
         this.spacesRepository = spacesRepository;
+        this.locationsRepository = locationsRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -54,6 +61,7 @@ public class SpaceServiceImpl implements SpaceService {
             space.setSpaceDescription(request.description());
             space.setAmenities(amenitiesList);
             space.setSuitableFor(suitableList);
+            space.setLocationsAvailable(new ArrayList<>());
             space.setSpaceCombos(comboList);
             space.setStatus(Status.ACTIVE);
 
@@ -64,19 +72,22 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
-    public boolean updateSpace(SpaceUpdateRequest request) {
+    public boolean addSpaceLocations(SpaceUpdateRequest request) {
         Space space = spacesRepository.findBySpaceName(request.name()).orElseThrow(
                 () -> new ResourceNotFoundException("Space", "Space Name", request.name())
         );
         try {
-            List<Integer> locationIdList = new ArrayList<>();
-            if (request.locations() != null) {
-                locationIdList = objectMapper.readValue(request.locations(), new TypeReference<>(){});
+            if (request.locationName() != null) {
+                Location location = locationsRepository.findLocationByLocationName(request.locationName()).orElseThrow(
+                        () -> new ResourceNotFoundException("Location", "Location Name", request.locationName())
+                );
+
+                if (space.getLocationsAvailable().contains(location.getLocationName())) {
+                    return false;
+                }
+                space.getLocationsAvailable().add(location.getLocationName());
+                spacesRepository.save(space);
             }
-
-
-            space.setLocationId(locationIdList);
-            spacesRepository.save(space);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -104,6 +115,9 @@ public class SpaceServiceImpl implements SpaceService {
                 () -> new ResourceNotFoundException("Space", "Space Name", spaceName)
         );
 
-        return false;
+        boolean isSuccess = space.getSpaceCombos().removeIf(combo -> Objects.equals(combo.getComboName(), comboName));
+
+        spacesRepository.save(space);
+        return isSuccess;
     }
 }

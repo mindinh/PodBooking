@@ -21,7 +21,7 @@ public class Space {
     private String spaceDescription;
     private List<String> suitableFor;
     private int spaceCapacity;
-    private List<Integer> locationId;
+    private List<String> locationsAvailable;
     private List<Combo> spaceCombos;
     private Status status;
 }

@@ -12,7 +12,7 @@ public interface SpaceService {
     List<Space> findAllSpaces();
     Space findSpaceByName(String name);
     void insertSpace(SpaceInsertRequest insertRequest);
-    boolean updateSpace(SpaceUpdateRequest updateRequest);
+    boolean addSpaceLocations(SpaceUpdateRequest updateRequest);
     boolean addCombo(String spaceName, ComboDto comboDto);
     boolean deleteCombo(String spaceName, String comboName);
 }
