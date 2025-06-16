@@ -11,6 +11,7 @@ public class LocationMapper {
         locationDto.setName(location.getLocationName());
         locationDto.setAddress(location.getAddress());
         locationDto.setIntroduction(location.getLocationIntroduction());
+        locationDto.setShortDescription(location.getLocationShortDescription());
         locationDto.setOpenHours(location.getOpeningHours());
         locationDto.setPhone(location.getLocationPhone());
         locationDto.setImages(location.getLocationImages());

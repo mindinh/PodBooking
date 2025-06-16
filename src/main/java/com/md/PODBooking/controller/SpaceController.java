@@ -5,6 +5,7 @@ import com.md.PODBooking.dto.ComboDto;
 import com.md.PODBooking.dto.ResponseDto;
 import com.md.PODBooking.request.SpaceInsertRequest;
 import com.md.PODBooking.request.SpaceUpdateRequest;
+import com.md.PODBooking.service.S3Service;
 import com.md.PODBooking.service.SpaceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(
         name = "CRUD REST APIs for Spaces"
@@ -21,9 +23,11 @@ import org.springframework.web.bind.annotation.*;
 public class SpaceController {
 
     private final SpaceService spaceService;
+    private final S3Service s3Service;
 
-    public SpaceController(SpaceService spaceService) {
+    public SpaceController(SpaceService spaceService, S3Service s3Service) {
         this.spaceService = spaceService;
+        this.s3Service = s3Service;
     }
 
     @Operation(
@@ -65,6 +69,16 @@ public class SpaceController {
         spaceService.insertSpace(spaceInsertRequest);
 
         return ResponseEntity.ok().body(new ResponseDto("201", "Space added successfully"));
+    }
+
+    @PostMapping("/add-image")
+    public ResponseEntity<?> addSpaceImage(@RequestParam String name, @RequestParam("file") MultipartFile file) {
+        try {
+            String url = s3Service.uploadFile(name, file);
+            return ResponseEntity.ok(url);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Upload failed: " + e.getMessage());
+        }
     }
 
 

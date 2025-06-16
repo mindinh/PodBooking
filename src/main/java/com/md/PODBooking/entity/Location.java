@@ -18,6 +18,7 @@ public class Location {
     private String locationId;
     private String locationName;
     private String locationIntroduction;
+    private String locationShortDescription;
     private String address;
     private String openingHours;
     private String locationPhone;

@@ -63,7 +63,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> {
                     // help define permission for access links
-                    requests.requestMatchers("/api/login", "/api/register").permitAll();
+                    requests.requestMatchers("/api/login", "/api/register", "/api/login/refresh").permitAll();
+                    requests.requestMatchers("/api/spaces/images/{spaceName}").permitAll();
+                    requests.requestMatchers("api/login/test").hasRole("CUSTOMER");
+                    requests.requestMatchers("/api/spaces/add-image").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/spaces").permitAll();
                     requests.requestMatchers(HttpMethod.POST, "/api/spaces/add", "/api/spaces/add-combo/{name}", "/api/spaces/add-location/{spaceName}", "/api/spaces/remove-combo/").hasRole("ADMIN");
                     requests.requestMatchers("/download/**").permitAll();

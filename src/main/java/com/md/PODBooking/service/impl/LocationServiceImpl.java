@@ -32,7 +32,13 @@ public class LocationServiceImpl implements LocationService {
     public List<LocationDto> findAllLocations() {
 
         return locationsRepository.findAll().stream().map(
-                LocationMapper::mapToDto
+                (item) -> {
+                    LocationDto locationDto = new LocationDto();
+                    locationDto.setImages(item.getLocationImages());
+                    locationDto.setName(item.getLocationName());
+                    locationDto.setShortDescription(item.getLocationShortDescription());
+                    return locationDto;
+                }
         ).toList();
     }
 
