@@ -74,8 +74,8 @@ public class SpaceController {
     @PostMapping("/add-image")
     public ResponseEntity<?> addSpaceImage(@RequestParam String name, @RequestParam("file") MultipartFile file) {
         try {
-            String url = s3Service.uploadFile(name, file);
-            return ResponseEntity.ok(url);
+//            String url = s3Service.uploadFile(name, file);
+            return ResponseEntity.ok("url");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Upload failed: " + e.getMessage());
         }

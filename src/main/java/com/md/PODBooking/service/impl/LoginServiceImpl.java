@@ -52,7 +52,7 @@ public class LoginServiceImpl implements LoginService {
 
         if (refreshToken != null && !jwtHelper.isTokenExpired(refreshToken)) {
             String role = jwtHelper.getDataToken(refreshToken);
-            System.out.println("Refresh: " + role);
+//            System.out.println("Refresh: " + role);
             accessToken = jwtHelper.generateAccessToken(role);
         }
 

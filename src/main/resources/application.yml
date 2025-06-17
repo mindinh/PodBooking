@@ -24,3 +24,6 @@ jwt:
     expiration-ms: 60000
   refresh-token:
     expiration-ms: 604800000
+
+audit:
+  user: sa

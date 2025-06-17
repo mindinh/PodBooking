@@ -12,20 +12,23 @@ import com.md.PODBooking.mapper.LocationMapper;
 import com.md.PODBooking.repository.LocationsRepository;
 import com.md.PODBooking.request.LocationInsertRequest;
 import com.md.PODBooking.service.LocationService;
+import com.md.PODBooking.service.S3Service;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class LocationServiceImpl implements LocationService {
 
     private LocationsRepository locationsRepository;
     private ObjectMapper objectMapper;
-    public LocationServiceImpl(LocationsRepository locationsRepository, ObjectMapper objectMapper) {
+    private S3Service s3Service;
+
+    public LocationServiceImpl(LocationsRepository locationsRepository, ObjectMapper objectMapper, S3Service s3Service) {
         this.locationsRepository = locationsRepository;
         this.objectMapper = objectMapper;
+        this.s3Service = s3Service;
     }
 
     @Override
@@ -56,6 +59,7 @@ public class LocationServiceImpl implements LocationService {
     public void insertLocation(LocationInsertRequest request) {
         Location location = new Location();
         try {
+            Map<String, List<String>> spacesImgs = new HashMap<>();
             Map<String, Integer> spaces = objectMapper.readValue(request.availableSpaces(), new TypeReference<>() {});
             List<Feature> features = objectMapper.readValue(request.features(), new TypeReference<>() {});
 
@@ -66,10 +70,30 @@ public class LocationServiceImpl implements LocationService {
             location.setOpeningHours(request.openHours());
             location.setAvailableSpaces(spaces);
             location.setLocationFeatures(features);
+            for (String s : spaces.keySet()) {
+                spacesImgs.put(s, new ArrayList<>());
+            }
+            location.setLocationSpaceImages(spacesImgs);
 
             locationsRepository.save(location);
         } catch (Exception e) {
             throw new InsertException("Location insert failed");
+        }
+    }
+
+    @Override
+    public void uploadSpaceImages(String locationName, String spaceName, MultipartFile file) {
+        Location location = locationsRepository.findLocationByLocationName(locationName).orElseThrow(
+                () -> new ResourceNotFoundException("Location", "Name", locationName)
+        );
+        try {
+            String imgUrl = s3Service.uploadFile(locationName, spaceName, file);
+            System.out.println(imgUrl);
+            location.getLocationSpaceImages().get(spaceName).add(imgUrl);
+
+            locationsRepository.save(location);
+        } catch (Exception e) {
+            throw new InsertException("Image insert failed");
         }
     }
 }

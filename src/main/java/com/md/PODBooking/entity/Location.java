@@ -3,9 +3,10 @@ package com.md.PODBooking.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -27,4 +28,16 @@ public class Location {
     private Map<String, List<String>> locationSpaceImages;
     private List<Feature> locationFeatures;
     private Status status;
+
+    @CreatedBy
+    private String createdBy;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedBy
+    private String updatedBy;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 }

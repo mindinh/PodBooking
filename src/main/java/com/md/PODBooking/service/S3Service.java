@@ -9,6 +9,8 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @Service
@@ -26,9 +28,10 @@ public class S3Service {
                 .build();
     }
 
-    public String uploadFile(String spaceName, MultipartFile file) throws IOException {
-        String folder = "spaces/" + spaceName + "/";
-        String key = folder + file.getOriginalFilename();
+    public String uploadFile(String locationName, String spaceName, MultipartFile file) throws IOException {
+        String folder = locationName + "/" + spaceName;
+        String encodedFolderPath = URLEncoder.encode(folder, StandardCharsets.UTF_8);
+        String key = "spaces/" +  encodedFolderPath + "/" + file.getOriginalFilename();
 
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -39,5 +42,14 @@ public class S3Service {
         s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
 
         return "https://" + bucketName + ".s3.amazonaws.com/" + key;
+    }
+
+    public void deleteFile(String key) {
+        DeleteObjectRequest request = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+
+        s3Client.deleteObject(request);
     }
 }

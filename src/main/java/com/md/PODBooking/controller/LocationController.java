@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(
         name = "CRUD REST APIs for Locations"
@@ -52,5 +53,12 @@ public class LocationController {
     public ResponseEntity<?> getLocation(@PathVariable String name) {
         return ResponseEntity.ok().body(locationService.findLocationByName(name));
 
+    }
+
+    @PostMapping("/add-space-image/{locationName}/{spaceName}")
+    public ResponseEntity<?> addSpaceImage(@PathVariable String locationName, @PathVariable String spaceName, MultipartFile fileImg) {
+        locationService.uploadSpaceImages(locationName, spaceName, fileImg);
+
+        return ResponseEntity.ok().body(new ResponseDto("200", "Space image uploaded"));
     }
 }

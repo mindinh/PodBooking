@@ -31,8 +31,4 @@ public class LoginController {
         return ResponseEntity.ok().body(new ResponseDto("200", newAccessToken));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<?> test() {
-        return ResponseEntity.ok().body(new ResponseDto("200", "test"));
-    }
 }
