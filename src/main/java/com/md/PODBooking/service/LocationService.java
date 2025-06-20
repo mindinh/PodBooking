@@ -12,4 +12,5 @@ public interface LocationService {
     LocationDto findLocationByName(String name);
     void insertLocation(LocationInsertRequest request);
     void uploadSpaceImages(String locationName, String spaceName, MultipartFile file);
+    boolean deleteSpaceImage(String locationName, String spaceName, String fileName);
 }

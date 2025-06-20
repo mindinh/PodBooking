@@ -61,4 +61,13 @@ public class LocationController {
 
         return ResponseEntity.ok().body(new ResponseDto("200", "Space image uploaded"));
     }
+
+    @DeleteMapping("/delete-space-image/{locationName}/{spaceName}/{fileName}")
+    public ResponseEntity<?> deleteSpaceImage(@PathVariable String locationName, @PathVariable String spaceName, @PathVariable String fileName) {
+        boolean isSuccess = locationService.deleteSpaceImage(locationName, spaceName, fileName);
+        if (!isSuccess) {
+            return ResponseEntity.internalServerError().body(new ResponseDto("500", "Error while deleting space image"));
+        }
+        return ResponseEntity.ok().body(new ResponseDto("200", "Space image deleted"));
+    }
 }
