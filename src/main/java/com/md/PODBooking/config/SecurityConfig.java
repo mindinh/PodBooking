@@ -70,6 +70,8 @@ public class SecurityConfig {
                     requests.requestMatchers("/api/spaces/add-image").hasRole("ADMIN");
                     requests.requestMatchers(HttpMethod.GET, "/api/spaces").permitAll();
                     requests.requestMatchers(HttpMethod.POST, "/api/spaces/add-combo/{name}", "/api/spaces/add-location/{spaceName}", "/api/spaces/remove-combo/").hasRole("ADMIN");
+                    requests.requestMatchers(HttpMethod.GET, "/api/bookings").permitAll();
+
                     requests.requestMatchers("/download/**").permitAll();
 
                     requests.anyRequest().authenticated();

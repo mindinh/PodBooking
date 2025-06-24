@@ -1,5 +1,6 @@
 package com.md.PODBooking.service.impl;
 
+import com.md.PODBooking.entity.Membership;
 import com.md.PODBooking.entity.Role;
 import com.md.PODBooking.entity.Status;
 import com.md.PODBooking.entity.User;
@@ -45,6 +46,7 @@ public class UserServiceImpl implements UserService {
         user.setUserPhone(userCreateRequest.phoneNumber());
         user.setFullName(userCreateRequest.fullName());
         user.setPassword(passwordEncoder.encode(userCreateRequest.password()));
+        user.setMembership(new Membership(String.valueOf(Membership.MembershipStatus.BRONZE), 0));
         user.setStatus(Status.ACTIVE);
         user.setRole(Role.CUSTOMER);
         user.setCreatedAt(LocalDateTime.now());

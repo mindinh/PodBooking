@@ -31,4 +31,15 @@ public class ComboDto {
     )
     @NotEmpty(message = "Combo description can not be null or empty")
     private String description;
+
+    @Schema(
+            description = "Duration (hour) of Combo ", example = "1 (hr)"
+    )
+    @NotEmpty(message = "Combo duration can not be null or empty")
+    private int duration;
+
+    @Schema(
+            description = "Extra Duration (hour) of Combo for a specific Space", example = "1 (hr)"
+    )
+    private int extraDuration;
 }
