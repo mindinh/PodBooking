@@ -55,6 +55,10 @@ public class LocationController {
 
     }
 
+    @Operation(
+            summary = "Insert a Space Image in a Location REST API",
+            description = "REST API to insert Location Space Image"
+    )
     @PostMapping("/add-space-image/{locationName}/{spaceName}")
     public ResponseEntity<?> addSpaceImage(@PathVariable String locationName, @PathVariable String spaceName, MultipartFile fileImg) {
         locationService.uploadSpaceImages(locationName, spaceName, fileImg);
@@ -62,6 +66,10 @@ public class LocationController {
         return ResponseEntity.ok().body(new ResponseDto("200", "Space image uploaded"));
     }
 
+    @Operation(
+            summary = "Delete a Space Image in a Location REST API",
+            description = "REST API to delete a Location Space Image"
+    )
     @DeleteMapping("/delete-space-image/{locationName}/{spaceName}/{fileName}")
     public ResponseEntity<?> deleteSpaceImage(@PathVariable String locationName, @PathVariable String spaceName, @PathVariable String fileName) {
         boolean isSuccess = locationService.deleteSpaceImage(locationName, spaceName, fileName);

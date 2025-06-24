@@ -105,7 +105,6 @@ public class LocationServiceImpl implements LocationService {
             }
             else {
                 String imgUrl = s3Service.uploadFile(locationName, spaceName, file);
-                System.out.println(imgUrl);
                 location.getLocationSpaceImages().get(spaceName).add(imgUrl);
 
                 locationsRepository.save(location);
@@ -125,7 +124,7 @@ public class LocationServiceImpl implements LocationService {
                 () -> new ResourceNotFoundException("Location", "Name", locationName)
         );
         String key = s3Service.formatKey(locationName, spaceName, fileName);
-        System.out.println(key);
+
         location.getLocationSpaceImages().get(spaceName).remove("https://podbooking-images.s3.ap-southeast-1.amazonaws.com/" + key);
         locationsRepository.save(location);
 
